@@ -83,7 +83,7 @@ public class myFrame {
 		btn_del.addActionListener(btnPress);
 		btn_del.setFont(font1);
 		pane1.add(btn_del);
-
+		System.out.println("gello");
 		btn_front = new JButton();
 		btn_front.setBounds(250, 0, 50, 30);
 		btn_front.setIcon(icon_lock);
