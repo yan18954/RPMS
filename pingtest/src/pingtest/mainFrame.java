@@ -12,5 +12,4 @@ public class mainFrame {
 		Timer timer = new Timer();
 		timer.schedule(new MyTimerTask(), 0, 3000);
 	}
-
 }
