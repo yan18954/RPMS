@@ -8,6 +8,7 @@ public class MyTimerTask extends TimerTask {
 	void setup() throws IOException {
 		frame.setFrame();
 		frame.readCfg();
+		frame.readServerCfg();
 	}
 	public void run() {
 		frame.reflash();

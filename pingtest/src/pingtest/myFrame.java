@@ -1,4 +1,5 @@
-package pingtest; 
+package pingtest;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -18,8 +19,10 @@ import java.io.InputStreamReader;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -32,11 +35,12 @@ public class myFrame {
 	JButton btn_del = new JButton();
 	JButton btn_front = new JButton();
 	JButton btn_reflash = new JButton();
-	JButton btn_ssh = new JButton();
+	// JButton btn_ssh = new JButton();
 	JTextField txtfd = new JTextField();
 	DefaultTableModel tableModel = null;
 	JTable table = new JTable();
 	boolean front_flag = false;
+	JPopupMenu m_popupMenu = new JPopupMenu();
 
 	Font font1 = new Font("微軟正黑體", Font.BOLD, 14);
 	Font font2 = new Font("微軟正黑體", Font.BOLD, 10);
@@ -45,9 +49,10 @@ public class myFrame {
 
 	Image img_unlock = Toolkit.getDefaultToolkit().getImage("nail_unlock.png");
 	ImageIcon icon_unlock = new ImageIcon(img_unlock);
-
+	String[] testServerData= {"192.168.2.221","root","tj;4u4826"}; //default service cfg info
+	String BMC_IP = "";
 	public void setFrame() {
-	
+
 		MyFrame = new JFrame("IP Status");
 
 		// *********************panel 1 ***********************
@@ -94,7 +99,7 @@ public class myFrame {
 		MyFrame.add(pane2);
 
 		// **************JTable setting*****************************
-		String[] headings = new String[] { "IP Address", "Status" };
+		String[] headings = new String[] { "Description","IP Address", "Status" };
 		// Object[][] data = new Object[][] ;
 		tableModel = new DefaultTableModel(headings, 0);
 		table = new JTable(tableModel);
@@ -102,21 +107,29 @@ public class myFrame {
 		table.setAutoCreateRowSorter(true);
 		table.addKeyListener(adp);
 		
+		// for test
+		table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                table1MouseClicked(evt);
+            	System.out.println("mouse click");
+            }
+		});
+		
+		
+
 		JScrollPane jscp = new JScrollPane(table);
-		jscp.setBounds(0, 0, 300, 120);
+		jscp.setBounds(0, 0, 300, 170);
 		pane2.add(jscp);
 		
-		btn_ssh = new JButton("QA");
-		btn_ssh.setBounds(0, 120, 70, 30);
-		btn_ssh.addActionListener(btnPress);
-		pane2.add(btn_ssh);
+		createPopupMenu();  //add right clicked menu
+		
 
 		// ********************Frame setting ***********************
 
 		Image im = Toolkit.getDefaultToolkit().getImage("de_icon.jpg");
 		MyFrame.setIconImage(im);
 		MyFrame.setSize(320, 250);
-		MyFrame.setLocation(1600,50 );
+		MyFrame.setLocation(50, 50);
 		MyFrame.setLayout(null);
 		// MyFrame.getContentPane().add(new JScrollPane(table));
 		MyFrame.setVisible(true);
@@ -148,6 +161,93 @@ public class myFrame {
 			}
 		}
 	}
+	
+	
+	private void createPopupMenu() {
+		int dialogButton = JOptionPane.YES_NO_OPTION;
+
+        m_popupMenu = new JPopupMenu();
+        
+        JMenuItem delMenItem_on = new JMenuItem("power on");
+        JMenuItem delMenItem_off = new JMenuItem("power off");
+        JMenuItem delMenItem_cycle = new JMenuItem("power cycle");
+        delMenItem_on.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure to perform this operation ?","Warning",dialogButton);
+        		if(dialogResult == JOptionPane.YES_OPTION){
+        			System.out.println("power on");
+        			//System.out.println(table.getSelectedRow());
+        			runCmd("plink -ssh "+testServerData[0]+" -l root -pw tj;4u4286 ipmitool -H "+BMC_IP+" -v -I lanplus -U admin -P admin chassis power on");
+        			//System.out.println("plink -ssh "+testServerData[0]+" -l root -pw tj;4u4286 ipmitool -H "+BMC_IP+" -v -I lanplus -U admin -P admin chassis power on");
+        		  // Saving code here
+        		}
+            }
+        });
+        
+        delMenItem_off.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure to perform this operation ?","Warning",dialogButton);
+        		if(dialogResult == JOptionPane.YES_OPTION){
+        			System.out.println("power off");
+        			runCmd("plink -ssh "+testServerData[0]+" -l root -pw tj;4u4286 ipmitool -H "+BMC_IP+" -v -I lanplus -U admin -P admin chassis power off");
+        		  // Saving code here
+        		}
+            }
+        });
+        
+        
+        delMenItem_cycle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure to perform this operation ?","Warning",dialogButton);
+        		if(dialogResult == JOptionPane.YES_OPTION){
+        			System.out.println("power cycle");
+        			runCmd("plink -ssh "+testServerData[0]+" -l root -pw tj;4u4286 ipmitool -H "+BMC_IP+" -v -I lanplus -U admin -P admin chassis power cycle");
+        		  // Saving code here
+        		}
+            }
+        });
+        
+        m_popupMenu.add(delMenItem_on);
+        m_popupMenu.add(delMenItem_off);
+        m_popupMenu.add(delMenItem_cycle);
+	}
+	
+	
+	private void table1MouseClicked(java.awt.event.MouseEvent evt) {
+		 
+	       mouseRightButtonClick(evt);
+	}
+	
+	
+	
+	
+	
+	private void mouseRightButtonClick(java.awt.event.MouseEvent evt) {
+        //判断是否为鼠标的BUTTON3按钮，BUTTON3为鼠标右键
+		
+        if (evt.getButton() == java.awt.event.MouseEvent.BUTTON3) {
+        	System.out.println("press right");
+        	try {
+        		BMC_IP = tableModel.getValueAt(table.getSelectedRow(), 1).toString();
+        	}catch(Exception e) {
+        		
+        	}
+        	System.out.println("BMCIP = "+BMC_IP);
+            //通过点击位置找到点击为表格中的行
+            int focusedRowIndex = table.rowAtPoint(evt.getPoint());
+            if (focusedRowIndex == -1) {
+                return;
+            }
+            //将表格所选项设为当前右键点击的行
+            table.setRowSelectionInterval(focusedRowIndex, focusedRowIndex);
+            //弹出菜单
+            m_popupMenu.show(table, evt.getX(), evt.getY());
+        }
+ 
+    }
+	
+	
+	
 
 	public ActionListener btnPress = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
@@ -164,7 +264,7 @@ public class myFrame {
 				delete();
 			}
 			if (e.getSource() == btn_front) {
-				
+
 				if (front_flag) {
 					MyFrame.setAlwaysOnTop(false);
 					front_flag = false;
@@ -179,31 +279,21 @@ public class myFrame {
 					btn_front.setIcon(icon_unlock);
 					System.out.println("X");
 				}
-			}
-			if(e.getSource()==btn_ssh) {
-				System.out.println("press ssh");
-				try {
-					process = runtime.exec("putty -ssh root@192.168.2.221 -pw tj;4u4286");
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-			}
-			
+			}	
 
 		}
+		
 	};
 
-	KeyAdapter adp = new KeyAdapter() {
+	KeyAdapter adp = new KeyAdapter() {   
 		public void keyPressed(KeyEvent e) {
 			int key = e.getKeyCode();
 			if (key == KeyEvent.VK_ENTER) {
 				add();
 			}
-			if(key == KeyEvent.VK_DELETE) {
-				//System.out.println("delete");
-				//delete();
+			if (key == KeyEvent.VK_DELETE) {
+				// System.out.println("delete");
+				// delete();
 			}
 
 		}
@@ -212,14 +302,14 @@ public class myFrame {
 	private void add() {
 		if (txtfd.getText().compareTo("") != 0 && IPCheck(txtfd.getText())) {
 			System.out.println("press add");
-			Object rowData[] = { txtfd.getText(), "OFF" };
+			Object rowData[] = { "null",txtfd.getText(), "OFF" };
 			tableModel.addRow(rowData);
 			txtfd.setText("");
 		}
 		txtfd.requestFocus();
 		// reflash();
 	}
-	
+
 	private void delete() {
 		System.out.println("selected row : " + table.getSelectedRow());
 		if (table.getSelectedRow() >= 0) {
@@ -229,12 +319,12 @@ public class myFrame {
 	}
 
 	public void reflash() {
-		System.out.println("Reflash");
-		System.out.println("total:" + tableModel.getRowCount() + " row");
+		//System.out.println("Reflash");
+		//System.out.println("total:" + tableModel.getRowCount() + " row");
 		// String str = tableModel.getValueAt(0, 0).toString();
 		// System.out.println("String = " +str);
 		for (int i = 0; i < tableModel.getRowCount(); i++) {
-			tableModel.setValueAt(isOnline(tableModel.getValueAt(i, 0).toString()), i, 1);
+			tableModel.setValueAt(isOnline(tableModel.getValueAt(i, 1).toString()), i, 2);
 		}
 		// System.out.println("row num : "+i);
 	}
@@ -243,10 +333,11 @@ public class myFrame {
 		try {
 			FileReader fr = new FileReader("saveIP.txt");
 			BufferedReader br = new BufferedReader(fr);
-			String IP = "";
-			while ((IP = br.readLine()) != null) {
-				System.out.println(IP);
-				Object rowData[] = { IP, "OFF" };
+			String[] data = new String[2];
+			//String IP = "";
+			while ((data = br.readLine().toString().split(",")) != null) {
+				//System.out.println(IP);
+				Object rowData[] = {data[0] ,data[1], "OFF" };
 				tableModel.addRow(rowData);
 			}
 			fr.close();
@@ -256,12 +347,36 @@ public class myFrame {
 		// return IP;
 		reflash();
 	}
+	
+	public void readServerCfg() throws IOException {
+		try {
+			FileReader fr = new FileReader("testServerCfg.txt");
+			BufferedReader br = new BufferedReader(fr);
+			String[] Server_data = new String[3];
+			Server_data = br.readLine().toString().split(",");
+			for(int data=0;data<Server_data.length;data++) {
+				testServerData[data] = Server_data[data];
+			}
+			//String IP = "";
+			fr.close();
+			//JOptionPane.showMessageDialog(MyFrame,"="+testServerData[0]+testServerData[1]+testServerData[2]);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(MyFrame, "Can not find testServerCfg.txt file !");
+			System.out.println(e);
+			//writeCfg();
+		}
+		// return IP;
+		//reflash();
+	}
+	
+	
+	
 
 	private void writeCfg() throws IOException {
 		System.out.println("write CFG");
 		FileWriter fw = new FileWriter("saveIP.txt");
 		for (int i = 0; i < tableModel.getRowCount(); i++) {
-			fw.write(tableModel.getValueAt(i, 0).toString() + "\r\n");
+			fw.write(tableModel.getValueAt(i, 0).toString()+","+tableModel.getValueAt(i, 1).toString() + "\r\n");
 		}
 		fw.close();
 	}
@@ -278,24 +393,25 @@ public class myFrame {
 		boolean res = false;
 		try {
 			ip = IP;
-			process = runtime.exec("ping -w 500 -n 1 " + ip);
+			//process = runtime.exec("ping -c 1 " + ip);       //for Linux 
+			process = runtime.exec("ping -w 500 -n 1 " + ip);  //for dos cmd 
 			// System.out.println("ping -n 1 " + ip);
 			is = process.getInputStream();
 			isr = new InputStreamReader(is);
 			br = new BufferedReader(isr);
 			while ((line = br.readLine()) != null) {
 				if (line.contains("TTL")) {
-					System.out.println(line);
+					//System.out.println(line);
 					res = true;
 					break;
 				}
 			}
 			if (res) {
-				System.out.println("ON");
+				//System.out.println("ON");
 				return "ON";
 
 			} else {
-				System.out.println("OFF");
+				//System.out.println("OFF");
 				return "OFF";
 			}
 		} catch (IOException e) {
@@ -304,17 +420,43 @@ public class myFrame {
 		}
 		return "OFF";
 	}
-	
+
 	boolean IPCheck(String str) {
 		System.out.println("IPCheck!");
-        if (str != null && !str.isEmpty()) {
-            String regex="^(((\\d{1,2})|(1\\d{2})|(2[2-4]\\d)|(25[0-5]))\\.){3}((\\d{1,2})|(1\\d{2})|(2[2-4]\\d)|(25[0-5]))$";
-            if (str.matches(regex)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return false;
-    }
+		if (str.compareTo("save") == 0) {
+			try {
+				writeCfg();
+				txtfd.setText("");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		if (str != null && !str.isEmpty()) {
+			String regex = "^(((\\d{1,2})|(1\\d{2})|(2[2-4]\\d)|(25[0-5]))\\.){3}((\\d{1,2})|(1\\d{2})|(2[0-4]\\d)|(25[0-5]))$";
+			if (str.matches(regex)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
+	}
+	
+	
+	private void runCmd(String cmd) {   //run command
+		try {
+			Runtime r = Runtime.getRuntime();
+			Process p = r.exec(cmd);
+			p.waitFor();
+		} catch (IOException e) {
+			System.out.println("IOException");
+
+		} catch (InterruptedException f) {
+			System.out.println("InterruptedExceptio");
+		}
+	}
+	
+	
 }
