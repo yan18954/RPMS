@@ -9,7 +9,7 @@ public class testSrtr {
 		
 		String myStr = getRunCmd("ipconfig");
 		System.out.println(myStr);
-		
+		System.out.println("hello");
 		
 		
 	}
