@@ -10,7 +10,7 @@ public class mainFrame {
 		System.out.println("system start!");
 		MyTimerTask myTask = new MyTimerTask();
 		myTask.setup();
-		Timer timer = new Timer();
+		Timer timer = new Timer(); 
 		timer.schedule(new MyTimerTask(), 0, 3000);
 	}
 }

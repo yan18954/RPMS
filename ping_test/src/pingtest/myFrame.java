@@ -289,7 +289,7 @@ public class myFrame {
 		public void keyPressed(KeyEvent e) {
 			int key = e.getKeyCode();
 			if (key == KeyEvent.VK_ENTER) {
-				add();
+				add();  //
 			}
 			if (key == KeyEvent.VK_DELETE) {
 				// System.out.println("delete");
@@ -302,7 +302,7 @@ public class myFrame {
 	private void add() {
 		if (txtfd.getText().compareTo("") != 0 && IPCheck(txtfd.getText())) {
 			System.out.println("press add");
-			Object rowData[] = { "null",txtfd.getText(), "OFF" };
+			Object rowData[] = { "",txtfd.getText(), "OFF" };
 			tableModel.addRow(rowData);
 			txtfd.setText("");
 		}
@@ -423,7 +423,7 @@ public class myFrame {
 
 	boolean IPCheck(String str) {
 		System.out.println("IPCheck!");
-		if (str.compareTo("save") == 0) {
+		if (str.compareTo(":save") == 0) {
 			try {
 				writeCfg();
 				txtfd.setText("");
