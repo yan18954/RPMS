@@ -73,10 +73,6 @@ public class myFrame {
 		btn_add.addActionListener(btnPress);
 		btn_add.setFont(font1);
 		pane1.add(btn_add);
-		/*
-		 * btn_reflash = new JButton("reflash"); btn_reflash.setBounds(200, 0, 80, 30);
-		 * btn_reflash.addActionListener(btnPress); pane1.add(btn_reflash);
-		 */
 
 		btn_del = new JButton("del");
 		btn_del.setBounds(180, 0, 70, 30);
@@ -107,11 +103,10 @@ public class myFrame {
 		table.setAutoCreateRowSorter(true);
 		table.addKeyListener(adp);
 		
-		// for test
 		table.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 table1MouseClicked(evt);
-            	System.out.println("mouse click");
+            	//System.out.println("mouse click");
             }
 		});
 		
@@ -123,17 +118,15 @@ public class myFrame {
 		createPopupMenu();  //add right clicked menu
 		
 
-		// ********************Frame setting ***********************
+		// ********************JFrame setting ***********************
 
 		Image im = Toolkit.getDefaultToolkit().getImage("de_icon.jpg");
 		MyFrame.setIconImage(im);
 		MyFrame.setSize(320, 250);
 		MyFrame.setLocation(50, 50);
 		MyFrame.setLayout(null);
-		// MyFrame.getContentPane().add(new JScrollPane(table));
 		MyFrame.setVisible(true);
 		MyFrame.setResizable(false);
-		// MyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MyFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		MyFrame.addWindowListener(new WindowHandler(MyFrame));
 
@@ -213,7 +206,6 @@ public class myFrame {
 	
 	
 	private void table1MouseClicked(java.awt.event.MouseEvent evt) {
-		 
 	       mouseRightButtonClick(evt);
 	}
 	
@@ -268,15 +260,12 @@ public class myFrame {
 					MyFrame.setAlwaysOnTop(false);
 					front_flag = false;
 					btn_front.setIcon(icon_lock);
-					// btn_front.setText("釘");
-
-					System.out.println("O");
+					//System.out.println("O");
 				} else {
 					MyFrame.setAlwaysOnTop(true);
 					front_flag = true;
 					// btn_front.setText("拔");
 					btn_front.setIcon(icon_unlock);
-					System.out.println("X");
 				}
 			}	
 
@@ -306,7 +295,6 @@ public class myFrame {
 			txtfd.setText("");
 		}
 		txtfd.requestFocus();
-		// reflash();
 	}
 
 	private void delete() {
@@ -319,13 +307,9 @@ public class myFrame {
 
 	public void reflash() {
 		//System.out.println("Reflash");
-		//System.out.println("total:" + tableModel.getRowCount() + " row");
-		// String str = tableModel.getValueAt(0, 0).toString();
-		// System.out.println("String = " +str);
 		for (int i = 0; i < tableModel.getRowCount(); i++) {
 			tableModel.setValueAt(isOnline(tableModel.getValueAt(i, 1).toString()), i, 2);
 		}
-		// System.out.println("row num : "+i);
 	}
 
 	public void readCfg() throws IOException {
@@ -333,9 +317,7 @@ public class myFrame {
 			FileReader fr = new FileReader("saveIP.txt");
 			BufferedReader br = new BufferedReader(fr);
 			String[] data = new String[2];
-			//String IP = "";
 			while ((data = br.readLine().toString().split(",")) != null) {
-				//System.out.println(IP);
 				Object rowData[] = {data[0] ,data[1], "OFF" };
 				tableModel.addRow(rowData);
 			}
@@ -343,7 +325,6 @@ public class myFrame {
 		} catch (Exception e) {
 			writeCfg();
 		}
-		// return IP;
 		reflash();
 	}
 	
@@ -356,7 +337,6 @@ public class myFrame {
 			for(int data=0;data<Server_data.length;data++) {
 				testServerData[data] = Server_data[data];
 			}
-			//String IP = "";
 			fr.close();
 			//JOptionPane.showMessageDialog(MyFrame,"="+testServerData[0]+testServerData[1]+testServerData[2]);
 		} catch (Exception e) {
@@ -364,15 +344,13 @@ public class myFrame {
 			System.out.println(e);
 			//writeCfg();
 		}
-		// return IP;
-		//reflash();
 	}
 	
 	
 	
 
 	private void writeCfg() throws IOException {
-		System.out.println("write CFG");
+		//System.out.println("write CFG");
 		FileWriter fw = new FileWriter("saveIP.txt");
 		for (int i = 0; i < tableModel.getRowCount(); i++) {
 			fw.write(tableModel.getValueAt(i, 0).toString()+","+tableModel.getValueAt(i, 1).toString() + "\r\n");
@@ -443,7 +421,6 @@ public class myFrame {
 		return false;
 	}
 	
-	
 	private void runCmd(String cmd) {   //run command
 		try {
 			Runtime r = Runtime.getRuntime();
@@ -456,6 +433,5 @@ public class myFrame {
 			System.out.println("InterruptedExceptio");
 		}
 	}
-	
 	
 }
