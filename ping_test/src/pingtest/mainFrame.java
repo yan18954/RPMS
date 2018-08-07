@@ -7,7 +7,7 @@ public class mainFrame {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		// auto
+		// auto resss
 		System.out.println("system start!");
 		MyTimerTask myTask = new MyTimerTask();
 		myTask.setup();
