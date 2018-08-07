@@ -115,7 +115,6 @@ public class myFrame {
             }
 		});
 		
-		
 
 		JScrollPane jscp = new JScrollPane(table);
 		jscp.setBounds(0, 0, 300, 170);
@@ -223,7 +222,7 @@ public class myFrame {
 	
 	
 	private void mouseRightButtonClick(java.awt.event.MouseEvent evt) {
-        //判断是否为鼠标的BUTTON3按钮，BUTTON3为鼠标右键
+        //judge if is right click
 		
         if (evt.getButton() == java.awt.event.MouseEvent.BUTTON3) {
         	System.out.println("press right");
@@ -233,14 +232,14 @@ public class myFrame {
         		
         	}
         	System.out.println("BMCIP = "+BMC_IP);
-            //通过点击位置找到点击为表格中的行
+            //find click row
             int focusedRowIndex = table.rowAtPoint(evt.getPoint());
             if (focusedRowIndex == -1) {
                 return;
             }
-            //将表格所选项设为当前右键点击的行
+            //selected row
             table.setRowSelectionInterval(focusedRowIndex, focusedRowIndex);
-            //弹出菜单
+            //pop up menu
             m_popupMenu.show(table, evt.getX(), evt.getY());
         }
  
