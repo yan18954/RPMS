@@ -41,7 +41,7 @@ public class myFrame {
 	JTable table = new JTable();
 	boolean front_flag = false;
 	JPopupMenu m_popupMenu = new JPopupMenu();
-
+	
 	Font font1 = new Font("微軟正黑體", Font.BOLD, 14);
 	Font font2 = new Font("微軟正黑體", Font.BOLD, 10);
 	Image img_lock = Toolkit.getDefaultToolkit().getImage("nail_lock.png");
