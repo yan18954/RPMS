@@ -49,7 +49,7 @@ public class myFrame {
 
 	Image img_unlock = Toolkit.getDefaultToolkit().getImage("nail_unlock.png");
 	ImageIcon icon_unlock = new ImageIcon(img_unlock);
-	String[] testServerData= {"192.168.2.221","root","tj;4u4826"}; //default service cfg info
+	String[] testServerData= {"192.168.2.221","root","tj;4u4826"}; //default service config info
 	String BMC_IP = "";
 	public void setFrame() {
 
@@ -79,7 +79,8 @@ public class myFrame {
 		btn_del.addActionListener(btnPress);
 		btn_del.setFont(font1);
 		pane1.add(btn_del);
-		System.out.println("gello");
+
+		
 		btn_front = new JButton();
 		btn_front.setBounds(250, 0, 50, 30);
 		btn_front.setIcon(icon_lock);
@@ -217,13 +218,13 @@ public class myFrame {
         //judge if is right click
 		
         if (evt.getButton() == java.awt.event.MouseEvent.BUTTON3) {
-        	System.out.println("press right");
+        	//System.out.println("press right");
         	try {
         		BMC_IP = tableModel.getValueAt(table.getSelectedRow(), 1).toString();
         	}catch(Exception e) {
         		
         	}
-        	System.out.println("BMCIP = "+BMC_IP);
+        	//System.out.println("BMCIP = "+BMC_IP);
             //find click row
             int focusedRowIndex = table.rowAtPoint(evt.getPoint());
             if (focusedRowIndex == -1) {
